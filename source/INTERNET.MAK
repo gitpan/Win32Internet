@@ -111,7 +111,7 @@ LINK32_OBJS= \
 OUTDIR=.\WinDebug
 INTDIR=.\WinDebug
 
-ALL : "d:\win32app\perl5\lib\auto\win32\internet\Internet.pll"
+ALL : "$(OUTDIR)\Internet.pll"
 
 CLEAN : 
 	-@erase "$(INTDIR)\INTERNET.OBJ"
@@ -120,8 +120,8 @@ CLEAN :
 	-@erase "$(OUTDIR)\Internet.exp"
 	-@erase "$(OUTDIR)\Internet.lib"
 	-@erase "$(OUTDIR)\Internet.pdb"
-	-@erase "d:\win32app\perl5\lib\auto\win32\internet\Internet.ilk"
-	-@erase "d:\win32app\perl5\lib\auto\win32\internet\Internet.pll"
+	-@erase "$(OUTDIR)\Internet.ilk"
+	-@erase "$(OUTDIR)\Internet.pll"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -147,20 +147,20 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 ..\..\..\libdebug\perl100.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wininet.lib version.lib /nologo /base:0x10120000 /subsystem:windows /dll /debug /machine:I386 /out:"d:\win32app\perl5\lib\auto\win32\internet\Internet.pll"
+# ADD LINK32 ..\..\..\libdebug\perl100.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wininet.lib version.lib /nologo /base:0x10120000 /subsystem:windows /dll /debug /machine:I386 /out:"$(OUTDIR)\Internet.pll"
 LINK32_FLAGS=..\..\..\libdebug\perl100.lib kernel32.lib user32.lib gdi32.lib\
  winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib\
  uuid.lib odbc32.lib odbccp32.lib wininet.lib version.lib /nologo\
  /base:0x10120000 /subsystem:windows /dll /incremental:yes\
  /pdb:"$(OUTDIR)/Internet.pdb" /debug /machine:I386 /def:".\INTERNET.DEF"\
- /out:"d:\win32app\perl5\lib\auto\win32\internet\Internet.pll"\
+ /out:"$(OUTDIR)\Internet.pll"\
  /implib:"$(OUTDIR)/Internet.lib" 
 DEF_FILE= \
 	".\INTERNET.DEF"
 LINK32_OBJS= \
 	"$(INTDIR)\INTERNET.OBJ"
 
-"d:\win32app\perl5\lib\auto\win32\internet\Internet.pll" : "$(OUTDIR)"\
+"$(OUTDIR)\Internet.pll" : "$(OUTDIR)"\
  $(DEF_FILE) $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)

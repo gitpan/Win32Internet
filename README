@@ -5,7 +5,7 @@
 # This module creates an object oriented interface to the Win32
 # Internet Functions (WININET.DLL).
 #
-# Version: 0.06 (26 Jan 1997)
+# Version: 0.07 (12 Feb 1997)
 # by Aldo Calpini <dada@divinf.it>
 #
 #######################################################################
@@ -13,11 +13,12 @@
 
 Manifest:
 ^^^^^^^^^
-The file Win32Internet-0.06.zip contains:
+The file Win32Internet-0.07.zip contains:
 
     README
     README.TXT
     TEST.PL
+    TEST-ASYNC.PL
     DOCS\APPEND.HTML
     DOCS\INDEX.HTML
     DOCS\INTERNET.HTML
@@ -42,6 +43,24 @@ Installation Instructions
     3. Copy the INTERNET.PLL file into the \PERL\LIB\AUTO\WIN32\INTERNET directory.
     4. Run the TEST.PL script to see if everything works.
     5. Have fun.
+
+
+Functions Overview
+^^^^^^^^^^^^^^^^^^
+General Functions:
+    CanonicalizeURL, Close, CombineURL, ConnectBackoff, ConnectRetries,
+    ConnectTimeout, ControlReceiveTimeout, ControlSendTimeout, CrackURL,
+    CreateURL, DataReceiveTimeout, DataSendTimeout, Error, FetchURL,
+    FTP, GetResponse, GetStatusCallback, HTTP, new, OpenURL, Password,
+    QueryDataAvailable, QueryOption, ReadEntireFile, ReadFile, SetOption,
+    SetStatusCallback, TimeConvert, UserAgent, Username, Version
+
+FTP Functions:
+    Ascii, Binary, Cd, Delete, Get, List, Mode, Mkdir, Put, Pwd, Rename, 
+    Rmdir
+
+HTTP Functions:
+    AddHeader, OpenRequest, QueryInfo, Request, SendRequest
 
 
 Documentation

@@ -301,7 +301,7 @@ See <A HREF="#new">new</A> for more information.
     <P>    
     If you don't specify a <I>flags</I> parameter, 
     </FONT><TT>ICU_ESCAPE</TT><FONT FACE=Arial SIZE=2>
-    will be used by default; for the possible values of <I>flags</I> refer to the 
+    will be used by default; for the other possible values of <I>flags</I> refer to the 
     <A HREF="append.html#WinInet">Microsoft Win32 Internet Functions</A> documentation.
     See also <A HREF="#CrackURL">CrackURL</A>.
     <BR>
@@ -482,7 +482,7 @@ See <A HREF="#new">new</A> for more information.
 <DD>Returns information about the progress of the asynchronous operation 
     identified by <I>context</I>;
     those informations consist of two values: a status code 
-    (one of the INTERNET_STATUS <A HREF="append.html#constants">constants</A>)
+    (one of the INTERNET_STATUS_* <A HREF="append.html#constants">constants</A>)
     and an additional value depending on the status code; for example, if the
     status code returned is INTERNET_STATUS_HANDLE_CREATED, the second value
     will hold the handle just created.
@@ -767,7 +767,7 @@ in a loop to verify what's happening; see also <A HREF="#GetStatusCallback">GetS
 <DT><FONT FACE=Arial SIZE=2><A NAME=TimeConvert>
 
     <B>TimeConvert</B> <I>time</I><BR>
-    <B>TimeConvert</B> <I>seconds, minute, hours, day, month, year, week_of_day, RFC</I>
+    <B>TimeConvert</B> <I>seconds, minute, hours, day, month, year, day_of_week, RFC</I>
 <DD>The first form takes a HTTP date/time string and returns the date/time converted in the following array:
  <P><I>seconds, minute, hours, day, month, year, day_of_week</I>
  <P>The second form does the opposite (or at least it should, because actually seems 
@@ -1279,13 +1279,21 @@ See <A HREF="#new">new</A> and <A HREF="#HTTP">HTTP</A> for more information.<P>
 
     <B>SendRequest</B> [<I>postdata</I>]
 
-<DD>Adds HTTP request headers to an HTTP request object created with <A HREF="#OpenRequest">OpenRequest</A>.
+<DD>Send an <A HREF="#OpenRequest">HTTP request</A> to the destination server.
     <I>postdata</I> are any optional data to send immediately after the request header; this is generally
     used for POST or PUT requests.
     <BR>
     Example:</FONT>
 <PRE> $HTTP->OpenRequest($REQUEST, "/index.html");
- $REQUEST->SendRequest();</PRE>
+ $REQUEST->SendRequest();
+ 
+ # A POST request...
+ $HTTP->OpenRequest($REQUEST, "/cgi-bin/somescript.pl", "POST");
+ 
+ #This line is a must -> (thanks Philip :)
+ $REQUEST->AddHeader("Content-Type: application/x-www-form-urlencoded");
+
+ $REQUEST->SendRequest("key1=value1&key2=value2&key3=value3");</PRE>
 <P>
 
 </DL>
@@ -1295,7 +1303,7 @@ See <A HREF="#new">new</A> and <A HREF="#HTTP">HTTP</A> for more information.<P>
 <HR>
 
 <FONT FACE=Arial SIZE=1>
-26 Jan 1997, Aldo Calpini 
+10 Feb 1997, Aldo Calpini 
 &lt;<A HREF="mailto:dada@divinf.it">dada@divinf.it</A>&gt;
 </FONT><P>
 

@@ -8,7 +8,7 @@
       onLoad="window.defaultStatus=document.title; return true">
 
 
-<FONT FACE=Arial><H2><A NAME=WinInet>WinInet Documentation</H2></FONT>
+<FONT FACE=Arial><H2><A NAME=WinInet>Microsoft's WinInet Documentation</H2></FONT>
 
 <FONT FACE=Arial SIZE=2>
 Complete documentation for the Microsoft Win32 Internet Functions can be found, in both HTML and zipped Word format, at this address:
@@ -23,7 +23,7 @@ Complete documentation for the Microsoft Win32 Internet Functions can be found, 
 This table reports the correspondence between the functions offered by WININET.DLL and their implementation
 in the Win32::Internet extension.
 Functions showing a "---" are not currently implemented. Functions enclosed in parens <B>( )</B> 
-are implemented in a higher-level routine, eg. together with other functions and not as single function. 
+aren't implemented straightforwardly, but in a higher-level routine, eg. together with other functions. 
 
 <P>
 
@@ -59,10 +59,10 @@ are implemented in a higher-level routine, eg. together with other functions and
 <TD><FONT FACE=Arial SIZE=2>---</TD>
 <TR>
 <TD><FONT FACE=Arial SIZE=2>InternetTimeFromSystemTime</TD>
-<TD><FONT FACE=Arial SIZE=2>---</TD>
+<TD><FONT FACE=Arial SIZE=2><A HREF="reference.html#TimeConvert">TimeConvert</A></TD>
 <TR>
 <TD><FONT FACE=Arial SIZE=2>InternetTimeToSystemTime</TD>
-<TD><FONT FACE=Arial SIZE=2>---</TD>
+<TD><FONT FACE=Arial SIZE=2><A HREF="reference.html#TimeConvert">TimeConvert</A></TD>
 <TR>
 <TD><FONT FACE=Arial SIZE=2>InternetAttemptConnect</TD>
 <TD><FONT FACE=Arial SIZE=2>---</TD>
@@ -147,7 +147,7 @@ are implemented in a higher-level routine, eg. together with other functions and
 
 </TABLE>
 <P>
-Actually, I don't plan to add support for Gopher functions, Cookie functions and Cache functions.
+Actually, I don't plan to add support for Gopher, Cookie and Cache functions.
 I will if there will be consistent requests to do so.
 <P>
 There are a number of higher-level functions in the Win32::Internet that simplify 
@@ -279,7 +279,7 @@ for their meaning and proper use, refer to the
 <HR>
 
 <FONT FACE=Arial SIZE=1>
-25 Jan 1997, Aldo Calpini 
+10 Jan 1997, Aldo Calpini 
 &lt;<A HREF="mailto:dada@divinf.it">dada@divinf.it</A>&gt;
 </FONT><P>
 

@@ -487,8 +487,8 @@ constant(CPerl* pPerl,char *name, int arg)
 					#endif
 				break;
 			case 'O':
-				if(strncmp(name,"INTERNET_OPEN_",14) == 0)
-					switch(name[14]) {
+				if(strncmp(name,"INTERNET_OPEN_TYPE_",19) == 0)
+					switch(name[19]) {
 					case 'D':
 						if(strEQ(name, "INTERNET_OPEN_TYPE_DIRECT"))
 							#ifdef INTERNET_OPEN_TYPE_DIRECT
@@ -897,13 +897,7 @@ XS(XS_Win32__Internet_InternetSetStatusCallback) {
 	}
 
 
-	mycallback=InternetSetStatusCallback((HINTERNET) PERLSvIV(ST(0)), PerlCallback);
-	if(mycallback==INTERNET_INVALID_STATUS_CALLBACK) { 
-		XSRETURN_NO;
-	} else {
-		ST(0)=sv_2mortal(newSViv((DWORD) mycallback));
-		XSRETURN(1);
-	}
+	XSRETURN_IV((long)InternetSetStatusCallback((HINTERNET) PERLSvIV(ST(0)), PerlCallback));
 }
 
 
@@ -1748,7 +1742,7 @@ XS(XS_Win32__Internet_FtpRenameFile) {
 	dXSARGS;
 
 	if(items != 3) {
-		CROAK("usage: FtpRenameFile($handle,$oldname,$newname);\n");
+		CROAK("usage: FtpRenameFile($handle, $oldname, $newname);\n");
 	}
 
 	if(FtpRenameFile((HINTERNET) PERLSvIV(ST(0)), 
@@ -1770,7 +1764,7 @@ XS(XS_Win32__Internet_FtpDeleteFile) {
 	dXSARGS;
 
 	if(items != 2) {
-		CROAK("usage: FtpDeleteFile($handle,$filename);\n");
+		CROAK("usage: FtpDeleteFile($handle, $filename);\n");
 	}
 
 	if(FtpDeleteFile((HINTERNET) PERLSvIV(ST(0)), 
@@ -1818,15 +1812,18 @@ XS(XS_Win32__Internet_HttpSendRequest) {
 
 	dXSARGS;
 
-	if(items != 5) {
-		CROAK("usage: HttpSendRequest($handle, $headers, $headerslen, $postdata, $postdatalen);\n");
+	if(items != 3) {
+		CROAK("usage: HttpSendRequest($handle, $headers, $postdata);\n");
 	}
 
+	DWORD headerslen  = strlen((LPCTSTR)PERLSvPV(ST(1), na));
+	DWORD postdatalen = strlen((LPCTSTR)PERLSvPV(ST(2), na));
+
 	if(HttpSendRequest((HINTERNET) PERLSvIV(ST(0)), 
-                     (LPCTSTR) PERLSvPV(ST(1), na), 
-  	                 (DWORD) PERLSvIV(ST(2)),
-  					 (LPVOID) PERLSvPV(ST(3), na), 
-  					 (DWORD) PERLSvIV(ST(4)))) {
+                       (LPCTSTR) PERLSvPV(ST(1), na), 
+  	                   headerslen,
+  					   (LPVOID) PERLSvPV(ST(2), na), 
+  					   postdatalen)) {
      /*
 	if(HttpSendRequest((HINTERNET) PERLSvIV(ST(0)), 
                        NULL, 0, NULL, 0)) {
