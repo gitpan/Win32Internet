@@ -5,9 +5,13 @@
 # This module creates an object oriented interface to the Win32
 # Internet Functions (WININET.DLL).
 #
-# Version: 0.07 (11 Feb 1997)
+# Version: 0.08 (14 Feb 1997)
 #
 #######################################################################
+
+# changes:
+# - fixed 2 bugs in Option(s) related subs
+# - works with build 30x also
 
 package Win32::Internet;
 
@@ -145,7 +149,7 @@ sub AUTOLOAD {
 #######################################################################
 # STATIC OBJECT PROPERTIES
 #
-$VERSION = "0.07";
+$VERSION = "0.08";
 
 %callback_code = ();
 %callback_info = ();
@@ -213,7 +217,7 @@ sub OpenURL {
     return undef unless ref($self);
 
     my $newhandle=InternetOpenUrl($self->{'handle'},$URL,"",0,0,0);
-    if(!defined($newhandle)) {
+    if(!$newhandle) {
         $self->{'Error'} = "Cannot open URL.";
         return undef;
     } else {
@@ -305,7 +309,7 @@ sub FetchURL {
     return undef unless ref($self);
 
     my $newhandle = InternetOpenUrl($self->{'handle'}, $URL, "", 0, 0, 0);
-    if(!defined($newhandle)) {
+    if(!$newhandle) {
         $self->{'Error'} = "Cannot open URL.";
         return undef;
     } else {
@@ -337,11 +341,12 @@ sub GetResponse {
 #===========
 sub Option {
 #===========
-    my($self, $option, $value);
+    my($self, $option, $value) = @_;
     return undef unless ref($self);
 
     my $retval = 0;
-    my $option = constant("INTERNET_OPTION_USER_AGENT", 0) unless defined($option);
+
+    $option = constant("INTERNET_OPTION_USER_AGENT", 0) unless defined($option);
   
     if(!defined($value)) {
         $retval = InternetQueryOption($self->{'handle'}, $option);
@@ -612,31 +617,14 @@ sub Error {
     if($errnum < 12000) {
         $errtext =  Win32::FormatMessage($errnum);
         $errtext =~ s/[\r\n]//g;
-    } elsif($errnum == 12006) {
-        $errtext = "The URL scheme could not be recognized, or is not supported.";
-    } elsif($errnum == 12005) {
-        $errtext = "The URL is invalid.";
-    } elsif($errnum == 12007) {
-        $errtext = "The server name could not be resolved.";
-    } elsif($errnum == 12009) {
-        $errtext = "A query to InternetQueryOption or InternetSetOption specified an invalid option value.";
-    } elsif($errnum == 12010) {
-        $errtext = "The length of an option supplied to InternetQueryOption or InternetSetOption is incorrect for the type of option specified.";
-    } elsif($errnum == 12019) {
-        $errtext = "The requested operation cannot be carried out because the handle supplied is not in the correct state.";
-    } elsif($errnum == 12029) {
-        $errtext = "The attempt to connect to the server failed.";
-    } elsif($errnum == 12031) {
-        $errtext = "The connection with the server has been reset.";
-    } elsif($errnum == 12152) {
-        $errtext = "The server response could not be parsed.";
-    } elsif($errnum == 12111) {
-        $errtext = "The FTP operation was not completed because the session was aborted.";
     } elsif($errnum == 12003) {
         ($tmp, $errtext) = InternetGetLastResponseInfo();
         chomp $errtext;
         1 while($errtext =~ s/(.*)\n//); # the last line should be significative... 
                                          # otherwise call GetResponse() to get it whole
+    } elsif($errnum >= 12000) {
+        $errtext = FormatMessage($errnum);
+        $errtext =~ s/[\r\n]//g;        
     } else {
         $errtext="Error";
     }
@@ -713,7 +701,7 @@ sub FTP {
                                     $username, $password,
                                     constant("INTERNET_SERVICE_FTP", 0),
                                     $pasv, $context);
-    if(defined($newhandle)) {
+    if($newhandle) {
         $self->{'connections'}++;
         $_[1] = _new($newhandle);
         $_[1]->{'Type'}     = "FTP";
@@ -879,7 +867,7 @@ sub List {
           $msec, $mmin, $mhou, $mday, $mmon, $myea
         ) = FtpFindFirstFile($self->{'handle'}, $pattern, 0, 0);
     
-        if(!defined($newhandle)) {
+        if(!$newhandle) {
             $self->{'Error'} = "Can't read FTP directory.";
             return undef;
         } else {
@@ -910,7 +898,7 @@ sub List {
           $msec, $mmin, $mhou, $mday, $mmon, $myea
         ) = FtpFindFirstFile($self->{'handle'}, $pattern, 0, 0);
     
-        if(!defined($newhandle)) {
+        if(!$newhandle) {
             $self->{'Error'} = "Can't read FTP directory.";
             return undef;
        
@@ -945,7 +933,7 @@ sub List {
     
         ($newhandle, $filename) = FtpFindFirstFile($self->{'handle'}, $pattern, 0, 0);
     
-        if(!defined($newhandle)) {
+        if(!$newhandle) {
             $self->{'Error'} = "Can't read FTP directory.";
             return undef;
       
@@ -955,7 +943,7 @@ sub List {
                 push(@results, $filename);
         
                 ($nextfile, $filename) = InternetFindNextFile($newhandle);  
-                # print "List.no more files\n" if !defined($nextfile);
+                # print "List.no more files\n" if !$nextfile;
         
             }
             InternetCloseHandle($newhandle);
@@ -1143,7 +1131,7 @@ sub HTTP {
                                     $username, $password,
                                     constant("INTERNET_SERVICE_HTTP", 0),
                                     $flags, $context);
-    if(defined($newhandle)) {
+    if($newhandle) {
         $self->{'connections'}++;
         $_[1] = _new($newhandle);
         $_[1]->{'Type'}     = "HTTP";
@@ -1203,7 +1191,7 @@ sub OpenRequest {
                                     $accept,
                                     $flags,
                                     $context);
-    if(defined($newhandle)) {
+    if($newhandle) {
         $_[1] = _new($newhandle);
         $_[1]->{'Type'}    = "HTTP_Request";
         $_[1]->{'method'}  = $method;
@@ -1315,7 +1303,7 @@ sub Request {
                                     0,
                                     $flags);
 
-    if(defined($newhandle)) {
+    if($newhandle) {
 
         $result = HttpSendRequest($newhandle, "", $postdata);
 

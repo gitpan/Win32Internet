@@ -1,10 +1,10 @@
 # TEST.PL for the Win32::Internet Package
-# Version 0.07
+# Version 0.08
 # by Aldo Calpini (dada@divinf.it)
 
 use Win32::Internet;
 
-print "\nWin32::Internet 0.07 TEST\n\n";
+print "\nWin32::Internet 0.08 TEST\n\n";
 
 $I = new Win32::Internet();
 # [dada] technical info...
@@ -13,10 +13,10 @@ $I = new Win32::Internet();
 ($v_package, $v_dll) = $I->Version();
 
 print "Package Version: $v_package\n";
-if($v_package ne "0.07") {
+if($v_package ne "0.08") {
     print "*** WARNING: Your Win32::Internet package is outdated!\n".
-          "    The latest version is 0.07.\n".
-          "    Please download and install Win32Internet-0.07.zip\n".
+          "    The latest version is 0.08.\n".
+          "    Please download and install Win32Internet-0.08.zip\n".
           "    from: http://www.divinf.it/dada/perl/internet...\n\n";
 }
 

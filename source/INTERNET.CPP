@@ -5,25 +5,30 @@
  * XS interface to the Win32 Internet Functions (WININET.DLL)
  * based on Registry.CPP written by Jesse Dougherty
  *
- * Version: 0.06 18 Dec 96
+ * Version: 0.08 14 Feb 97
  *
  */
 
+// Basic includes
 #define  WIN32_LEAN_AND_MEAN
 #include <windows.h>
+
+// Extension specific includes
 #include <wininet.h>
 #include <winver.h>
 
+// Perl includes
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+
 // Section for the constant definitions.
 #define CROAK croak
 #define MAX_LENGTH 2048
 #define TMPBUFSZ 1024
 
 // VALUES FILLED IN BY PerlCallback
-DWORD status=-1;
+DWORD status = -1;
 static CPerl* myPerl;
 
 static time_t ft2timet(FILETIME *ft)
@@ -70,9 +75,7 @@ static time_t ft2timet(FILETIME *ft)
 
 
 
-DWORD
-constant(CPerl* pPerl,char *name, int arg)
-{
+DWORD constant(CPerl* pPerl,char *name, int arg) {
     errno = 0;
     switch (*name) {
     case 'A':
@@ -780,14 +783,14 @@ XS(XS_Win32__Internet_constant)
     dXSARGS;
 
     if (items != 2) {
-		croak("Usage: Win32::Internet::constant(name,arg)");
+		croak("Usage: Win32::Internet::constant(name, arg)");
     }
     {
 		char *	name = (char *)SvPV(ST(0),na);
 		int	arg = (int)SvIV(ST(1));
 		DWORD RETVAL;
 
-		RETVAL = constant(pPerl,name, arg);
+		RETVAL = constant(pPerl, name, arg);
 		ST(0) = sv_newmortal();
 		sv_setiv(ST(0), (IV)RETVAL);
     }
@@ -908,7 +911,7 @@ XS(XS_Win32__Internet_InternetOpen) {
 	
 	dXSARGS;
 
-	myPerl=pPerl;
+	myPerl = pPerl;
 
 	if(items != 5) {
 		CROAK("usage: InternetOpen($agent, $type, $proxy, $proxybypass, $flags);\n");
@@ -1274,18 +1277,18 @@ XS(XS_Win32__Internet_InternetCrackUrl) {
 
 	myURL.dwStructSize=sizeof(myURL);
 
-	myURL.lpszScheme=safemalloc(mysize);
+	myURL.lpszScheme=(char *)safemalloc(mysize);
 	myURL.dwSchemeLength=mysize;
-    myURL.lpszHostName=safemalloc(mysize);
+    myURL.lpszHostName=(char *)safemalloc(mysize);
 	myURL.dwHostNameLength=mysize;
 	myURL.nPort=mysize;
-	myURL.lpszUserName=safemalloc(mysize);
+	myURL.lpszUserName=(char *)safemalloc(mysize);
 	myURL.dwUserNameLength=mysize;
-	myURL.lpszPassword=safemalloc(mysize);
+	myURL.lpszPassword=(char *)safemalloc(mysize);
 	myURL.dwPasswordLength=mysize;
-	myURL.lpszUrlPath=safemalloc(mysize);
+	myURL.lpszUrlPath=(char *)safemalloc(mysize);
 	myURL.dwUrlPathLength=mysize;
-	myURL.lpszExtraInfo=safemalloc(mysize);
+	myURL.lpszExtraInfo=(char *)safemalloc(mysize);
 	myURL.dwExtraInfoLength=mysize;
 
 	if(InternetCrackUrl((LPCSTR) PERLSvPV(ST(0), na), 
@@ -1540,8 +1543,8 @@ XS(XS_Win32__Internet_FtpFindFirstFile) {
 	if(myhandle=FtpFindFirstFile((HINTERNET) PERLSvIV(ST(0)), 
           		                 (LPCTSTR) PERLSvPV(ST(1), na),
 								 (LPWIN32_FIND_DATA) &myfile,
-                                 (DWORD) PERLSvIV(ST(3)),
-						         (DWORD) PERLSvIV(ST(4)))) {
+                                 (DWORD) PERLSvIV(ST(2)),
+						         (DWORD) PERLSvIV(ST(3)))) {
 		myFileSize = myfile.nFileSizeLow + 
 			        (myfile.nFileSizeHigh << sizeof(myfile.nFileSizeLow));
 		ST(0)=sv_2mortal(newSViv((long) myhandle));
@@ -1905,12 +1908,35 @@ XS(XS_Win32__Internet_HttpAddRequestHeaders) {
 	}
 }
 
+XS(XS_Win32__Internet_FormatMessage) {
+
+	dXSARGS;
+	char message[1024];
+
+	if(items != 1) {
+		CROAK("usage: FormatMessage($error);\n");
+	}
+
+	if(FormatMessage(FORMAT_MESSAGE_FROM_HMODULE,
+					 GetModuleHandle("WININET"),
+					 (int) PERLSvIV(ST(0)), 
+					 0,
+					 message,
+					 sizeof(message),
+					 NULL)) {
+		ST(0) = sv_2mortal(newSVpv(message, 0));
+		XSRETURN(1);
+	} else {
+		XSRETURN_NO;
+	}
+}
+
+
 
 XS(boot_Win32__Internet)
 {
     dXSARGS;
     char* file = __FILE__;
-	char* mythread;
 
     newXS("Win32::Internet::constant", XS_Win32__Internet_constant, file);
 
@@ -1932,6 +1958,7 @@ XS(boot_Win32__Internet)
 	newXS("Win32::Internet::InternetConnect", XS_Win32__Internet_InternetConnect, file);
 	newXS("Win32::Internet::InternetSetStatusCallback", XS_Win32__Internet_InternetSetStatusCallback, file);
     newXS("Win32::Internet::InternetDllVersion", XS_Win32__Internet_InternetDllVersion, file);
+	newXS("Win32::Internet::FormatMessage", XS_Win32__Internet_FormatMessage, file);
 
 	newXS("Win32::Internet::FtpGetCurrentDirectory", XS_Win32__Internet_FtpGetCurrentDirectory, file);
 	newXS("Win32::Internet::FtpSetCurrentDirectory", XS_Win32__Internet_FtpSetCurrentDirectory, file);

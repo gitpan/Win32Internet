@@ -4,23 +4,24 @@
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
 !IF "$(CFG)" == ""
-CFG=INTERNET - Win32 Debug
-!MESSAGE No configuration specified.  Defaulting to INTERNET - Win32 Debug.
+CFG=INTERNET300 - Win32 Debug
+!MESSAGE No configuration specified.  Defaulting to INTERNET300 - Win32 Debug.
 !ENDIF 
 
-!IF "$(CFG)" != "INTERNET - Win32 Release" && "$(CFG)" !=\
- "INTERNET - Win32 Debug"
+!IF "$(CFG)" != "INTERNET300 - Win32 Release" && "$(CFG)" !=\
+ "INTERNET300 - Win32 Debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
 !MESSAGE You can specify a configuration when running NMAKE on this makefile
 !MESSAGE by defining the macro CFG on the command line.  For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "Internet.mak" CFG="INTERNET - Win32 Debug"
+!MESSAGE NMAKE /f "Internet.mak" CFG="INTERNET300 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "INTERNET - Win32 Release" (based on\
+!MESSAGE "INTERNET300 - Win32 Release" (based on\
  "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "INTERNET - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "INTERNET300 - Win32 Debug" (based on\
+ "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 !ERROR An invalid configuration is specified.
 !ENDIF 
@@ -32,12 +33,12 @@ NULL=nul
 !ENDIF 
 ################################################################################
 # Begin Project
-# PROP Target_Last_Scanned "INTERNET - Win32 Debug"
+# PROP Target_Last_Scanned "INTERNET300 - Win32 Debug"
 CPP=cl.exe
 RSC=rc.exe
 MTL=mktyplib.exe
 
-!IF  "$(CFG)" == "INTERNET - Win32 Release"
+!IF  "$(CFG)" == "INTERNET300 - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -62,10 +63,11 @@ CLEAN :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /FR /YX /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "../../../" /I "../../../inc" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "../../../" /I "../../../inc" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "PERL_OBJECT" /D "MSWIN32" /D "EMBED" /YX /c
 # SUBTRACT CPP /Fr
 CPP_PROJ=/nologo /MT /W3 /GX /O2 /I "../../../" /I "../../../inc" /D "WIN32" /D\
- "NDEBUG" /D "_WINDOWS" /Fp"$(INTDIR)/Internet.pch" /YX /Fo"$(INTDIR)/" /c 
+ "NDEBUG" /D "_WINDOWS" /D "PERL_OBJECT" /D "MSWIN32" /D "EMBED"\
+ /Fp"$(INTDIR)/Internet.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\WinRel/
 CPP_SBRS=.\.
 # ADD BASE MTL /nologo /D "NDEBUG" /win32
@@ -81,8 +83,8 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 ..\..\..\LibRel\perl100.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wininet.lib version.lib /nologo /base:0x10120000 /subsystem:windows /dll /machine:I386 /out:"WinRel\Internet.pll"
-LINK32_FLAGS=..\..\..\LibRel\perl100.lib kernel32.lib user32.lib gdi32.lib\
+# ADD LINK32 ..\..\..\Release\perl300.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wininet.lib version.lib /nologo /base:0x10120000 /subsystem:windows /dll /machine:I386 /out:"WinRel\Internet.pll"
+LINK32_FLAGS=..\..\..\Release\perl300.lib kernel32.lib user32.lib gdi32.lib\
  winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib\
  uuid.lib odbc32.lib odbccp32.lib wininet.lib version.lib /nologo\
  /base:0x10120000 /subsystem:windows /dll /incremental:no\
@@ -98,7 +100,7 @@ LINK32_OBJS= \
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-!ELSEIF  "$(CFG)" == "INTERNET - Win32 Debug"
+!ELSEIF  "$(CFG)" == "INTERNET300 - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -111,7 +113,7 @@ LINK32_OBJS= \
 OUTDIR=.\WinDebug
 INTDIR=.\WinDebug
 
-ALL : "WinDebug\Internet.pll"
+ALL : "..\..\..\..\lib\auto\win32\internet\Internet.pll"
 
 CLEAN : 
 	-@erase "$(INTDIR)\INTERNET.OBJ"
@@ -120,8 +122,8 @@ CLEAN :
 	-@erase "$(OUTDIR)\Internet.exp"
 	-@erase "$(OUTDIR)\Internet.lib"
 	-@erase "$(OUTDIR)\Internet.pdb"
-	-@erase "WinDebug\Internet.ilk"
-	-@erase "WinDebug\Internet.pll"
+	-@erase "..\..\..\..\lib\auto\win32\internet\Internet.ilk"
+	-@erase "..\..\..\..\lib\auto\win32\internet\Internet.pll"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -147,8 +149,8 @@ BSC32_SBRS= \
 	
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386
-# ADD LINK32 ..\..\..\libdebug\perl100.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wininet.lib version.lib /nologo /base:0x10120000 /subsystem:windows /dll /debug /machine:I386 /out:"WinDebug\Internet.pll"
-LINK32_FLAGS=..\..\..\libdebug\perl100.lib kernel32.lib user32.lib gdi32.lib\
+# ADD LINK32 ..\..\..\Debug\perl300.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wininet.lib version.lib /nologo /base:0x10120000 /subsystem:windows /dll /debug /machine:I386 /out:"WinDebug\Internet.pll"
+LINK32_FLAGS=..\..\..\Debug\perl300.lib kernel32.lib user32.lib gdi32.lib\
  winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib\
  uuid.lib odbc32.lib odbccp32.lib wininet.lib version.lib /nologo\
  /base:0x10120000 /subsystem:windows /dll /incremental:yes\
@@ -160,8 +162,8 @@ DEF_FILE= \
 LINK32_OBJS= \
 	"$(INTDIR)\INTERNET.OBJ"
 
-"WinDebug\Internet.pll" : "$(OUTDIR)"\
- $(DEF_FILE) $(LINK32_OBJS)
+"..\..\..\..\lib\auto\win32\internet\Internet.pll" : "$(OUTDIR)" $(DEF_FILE)\
+ $(LINK32_OBJS)
     $(LINK32) @<<
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
@@ -189,12 +191,12 @@ LINK32_OBJS= \
 ################################################################################
 # Begin Target
 
-# Name "INTERNET - Win32 Release"
-# Name "INTERNET - Win32 Debug"
+# Name "INTERNET300 - Win32 Release"
+# Name "INTERNET300 - Win32 Debug"
 
-!IF  "$(CFG)" == "INTERNET - Win32 Release"
+!IF  "$(CFG)" == "INTERNET300 - Win32 Release"
 
-!ELSEIF  "$(CFG)" == "INTERNET - Win32 Debug"
+!ELSEIF  "$(CFG)" == "INTERNET300 - Win32 Debug"
 
 !ENDIF 
 
@@ -203,9 +205,9 @@ LINK32_OBJS= \
 
 SOURCE=.\INTERNET.DEF
 
-!IF  "$(CFG)" == "INTERNET - Win32 Release"
+!IF  "$(CFG)" == "INTERNET300 - Win32 Release"
 
-!ELSEIF  "$(CFG)" == "INTERNET - Win32 Debug"
+!ELSEIF  "$(CFG)" == "INTERNET300 - Win32 Debug"
 
 !ENDIF 
 
@@ -215,10 +217,11 @@ SOURCE=.\INTERNET.DEF
 
 SOURCE=.\INTERNET.CPP
 
-!IF  "$(CFG)" == "INTERNET - Win32 Release"
+!IF  "$(CFG)" == "INTERNET300 - Win32 Release"
 
 DEP_CPP_INTER=\
 	"..\..\..\av.h"\
+	"..\..\..\build.h"\
 	"..\..\..\config.h"\
 	"..\..\..\cop.h"\
 	"..\..\..\cv.h"\
@@ -230,12 +233,16 @@ DEP_CPP_INTER=\
 	"..\..\..\hv.h"\
 	"..\..\..\IPerlSup.h"\
 	"..\..\..\mg.h"\
+	"..\..\..\nostdio.h"\
 	"..\..\..\nt.h"\
-	"..\..\..\ntpp.h"\
 	"..\..\..\NTXSub.h"\
+	"..\..\..\objpp.h"\
 	"..\..\..\op.h"\
 	"..\..\..\opcode.h"\
-	"..\..\..\perllib.h"\
+	"..\..\..\perlio.h"\
+	"..\..\..\perlLib.h"\
+	"..\..\..\perlsdio.h"\
+	"..\..\..\perlsfio.h"\
 	"..\..\..\perly.h"\
 	"..\..\..\pp.h"\
 	"..\..\..\proto.h"\
@@ -253,24 +260,60 @@ DEP_CPP_INTER=\
 	{$(INCLUDE)}"\WININET.H"\
 	
 NODEP_CPP_INTER=\
+	"..\..\..\os2ish.h"\
+	"..\..\..\plan9\plan9ish.h"\
 	"..\..\..\vmsish.h"\
 	
 
 "$(INTDIR)\INTERNET.OBJ" : $(SOURCE) $(DEP_CPP_INTER) "$(INTDIR)"
 
 
-!ELSEIF  "$(CFG)" == "INTERNET - Win32 Debug"
+!ELSEIF  "$(CFG)" == "INTERNET300 - Win32 Debug"
 
 DEP_CPP_INTER=\
+	"..\..\..\av.h"\
+	"..\..\..\build.h"\
 	"..\..\..\config.h"\
+	"..\..\..\cop.h"\
+	"..\..\..\cv.h"\
+	"..\..\..\dosish.h"\
 	"..\..\..\embed.h"\
+	"..\..\..\form.h"\
+	"..\..\..\gv.h"\
+	"..\..\..\handy.h"\
+	"..\..\..\hv.h"\
+	"..\..\..\IPerlSup.h"\
+	"..\..\..\mg.h"\
+	"..\..\..\nostdio.h"\
 	"..\..\..\nt.h"\
 	"..\..\..\NTXSub.h"\
+	"..\..\..\objpp.h"\
+	"..\..\..\op.h"\
+	"..\..\..\opcode.h"\
+	"..\..\..\perlio.h"\
+	"..\..\..\perlLib.h"\
+	"..\..\..\perlsdio.h"\
+	"..\..\..\perlsfio.h"\
+	"..\..\..\perly.h"\
+	"..\..\..\pp.h"\
+	"..\..\..\proto.h"\
+	"..\..\..\regexp.h"\
+	"..\..\..\scope.h"\
+	"..\..\..\sv.h"\
+	"..\..\..\unixish.h"\
+	"..\..\..\util.h"\
 	".\../../../EXTERN.h"\
+	".\../../../inc\dirent.h"\
 	".\../../../perl.h"\
 	".\../../../XSUB.h"\
+	{$(INCLUDE)}"\sys\STAT.H"\
 	{$(INCLUDE)}"\sys\TYPES.H"\
 	{$(INCLUDE)}"\WININET.H"\
+	
+NODEP_CPP_INTER=\
+	"..\..\..\os2ish.h"\
+	"..\..\..\plan9\plan9ish.h"\
+	"..\..\..\vmsish.h"\
 	
 
 "$(INTDIR)\INTERNET.OBJ" : $(SOURCE) $(DEP_CPP_INTER) "$(INTDIR)"
