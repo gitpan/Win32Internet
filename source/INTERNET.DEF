@@ -1,0 +1,3 @@
+LIBRARY Internet
+EXPORTS
+	boot_Win32__Internet
